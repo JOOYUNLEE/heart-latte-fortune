@@ -73,16 +73,26 @@
         </div>
         <div class="play-time" aria-live="polite"><span class="jua" id="time-remaining">9</span></div>
         <div class="play-core">
-        <div class="stage-status" id="stage-status" role="status">잔을 자유롭게 움직여요</div>
+        <div class="stage-status" id="stage-status" role="status">컵을 좌우로 흔들어보세요</div>
         <div class="hold-hint" id="hold-hint">나만의 하트가 완성돼요</div>
-        <div class="cup-control-stage" id="pour-inner" aria-label="컵을 끌어 하트 라떼 아트를 조정하세요">
+        <div class="cup-control-stage" id="pour-inner" aria-label="컵을 좌우로 흔들어 하트 라떼 아트를 조정하세요">
           <img class="pitcher-photo" id="pitcher-photo" src="./images/milk-pitcher-ready-v2.webp" alt="" aria-hidden="true" />
           <div class="milk-stream" id="milk-stream" aria-hidden="true"></div>
-          <div class="cup-play" id="cup-play" role="application" aria-label="컵을 누른 채 움직여 하트의 위치와 모양을 조절">
+          <div class="cup-play" id="cup-play" role="application" aria-label="컵을 누른 채 좌우로 흔들어 하트의 모양을 조절">
+            <svg class="cup-ring" id="cup-ring" viewBox="0 0 100 100" aria-hidden="true">
+              <path class="cup-ring-arc cup-ring-arc-right" id="cup-ring-right" d="M 87.68 23.62 A 46 46 0 0 1 87.68 76.38" />
+              <path class="cup-ring-arc cup-ring-arc-left" id="cup-ring-left" d="M 12.32 76.38 A 46 46 0 0 1 12.32 23.62" />
+            </svg>
             <span class="cup-touch-surface" aria-hidden="true"></span>
-            <img class="latte-photo play-latte-photo play-latte-photo-prev" id="play-latte-photo-prev" src="./images/latte-play-30deg-alpha-v1.png" alt="" aria-hidden="true" />
-            <img class="latte-photo play-latte-photo" id="play-latte-photo" src="./images/latte-play-30deg-alpha-v1.png" alt="하트 라떼 아트가 담긴 컵" />
+            <div class="art-flair" id="play-art-flair">
+              <img class="latte-photo play-latte-photo art-ghost" id="play-latte-photo-ghost2" alt="" aria-hidden="true" />
+              <img class="latte-photo play-latte-photo art-ghost" id="play-latte-photo-ghost1" alt="" aria-hidden="true" />
+              <img class="latte-photo play-latte-photo play-latte-photo-prev" id="play-latte-photo-prev" src="./images/latte-play-30deg-alpha-v1.png" alt="" aria-hidden="true" />
+              <img class="latte-photo play-latte-photo" id="play-latte-photo" src="./images/latte-play-30deg-alpha-v1.png" alt="하트 라떼 아트가 담긴 컵" />
+            </div>
             <img class="cup-symbol" src="./images/angelinus-symbol.png" alt="" aria-hidden="true" />
+            <span class="drag-label" id="drag-label" aria-hidden="true">↔ 좌우로 흔들어보세요</span>
+            <span class="drag-finger" id="drag-finger" aria-hidden="true">👆</span>
           </div>
         </div>
         </div>
@@ -91,7 +101,7 @@
       <!-- 3·2·1 카운트다운 -->
       <div class="intro-overlay countdown-overlay" id="intro-overlay" aria-live="polite">
         <div class="countdown-number jua" id="countdown-number">3</div>
-        <p class="countdown-guide">컵을 천천히 움직여<br/>나만의 하트 라떼를 완성하세요</p>
+        <p class="countdown-guide">컵을 좌우로 흔들면<br/>다양한 모양의 하트 라떼가 완성돼요</p>
       </div>
 
       <!-- 시간 초과(무입력) 안내 팝업 -->
@@ -115,7 +125,11 @@
               <p><b>오늘의 한 잔</b><span>고마운 사람과 짧은 통화를 해보세요.</span></p>
             </div>
             <div class="result-latte-stage" aria-label="내가 만든 라떼 아트">
-            <img class="latte-photo result-latte-photo" id="result-photo" src="./images/latte-play-30deg-alpha-v1.png" alt="완성된 라떼 아트" />
+            <div class="art-flair" id="result-art-flair">
+              <img class="latte-photo result-latte-photo art-ghost" id="result-photo-ghost2" alt="" aria-hidden="true" />
+              <img class="latte-photo result-latte-photo art-ghost" id="result-photo-ghost1" alt="" aria-hidden="true" />
+              <img class="latte-photo result-latte-photo" id="result-photo" src="./images/latte-play-30deg-alpha-v1.png" alt="완성된 라떼 아트" />
+            </div>
             </div>
           </article>
 
