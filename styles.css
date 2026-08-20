@@ -1,0 +1,679 @@
+/* OCB Mini Game Design System / Light / brand_orange
+   Reference applied: warm cream, soft coffee-object depth, generous calm space.
+   All UI colors, spacing and radii use design-system tokens. */
+@font-face{font-family:Pretendard;src:url('./assets/fonts/Pretendard-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Pretendard;src:url('./assets/fonts/Pretendard-Medium.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:Pretendard;src:url('./assets/fonts/Pretendard-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:Pretendard;src:url('./assets/fonts/Pretendard-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:Pretendard;src:url('./assets/fonts/Pretendard-ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
+@font-face{font-family:Jua;src:url('./assets/fonts/Jua-Korean.woff2') format('woff2');font-weight:400;font-display:swap}
+
+:root{--brand-100:#fff4ec;--brand-200:#ffe6d6;--brand-300:#ffd0b3;--brand-400:#ffb184;--brand-500:#ff9a54;--brand-600:#ff7c11;--brand-700:#e8650a;--brand-800:#bd4f05;--brand-900:#8a3a04;--brand-1000:#4d2002;--gray-00:#fff;--gray-100:#f7f8f9;--gray-200:#f3f4f5;--gray-300:#eeeff1;--gray-400:#dcdee3;--gray-500:#d1d3d8;--gray-600:#b0b3ba;--gray-700:#868b94;--gray-800:#555d6d;--gray-900:#2a3038;--gray-1000:#1a1c20;--text:var(--brand-1000);--muted:var(--gray-800);--subtle:var(--gray-700);--brand:var(--brand-900);--brand-contrast:var(--brand-800);--r12:12px;--r16:16px;--full:9999px;--shadow:0 2px 12px #0000000c;--brand-grad:linear-gradient(135deg,var(--brand-1000),var(--brand-800))}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:var(--brand-100)}body{font-family:Pretendard,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}button{font:inherit;border:0;cursor:pointer;-webkit-user-select:none;-webkit-touch-callout:none;user-select:none}.jua{font-family:Jua,Pretendard,sans-serif;letter-spacing:-.5px}.brand-serif{font-family:Georgia,'Noto Serif KR',serif;font-weight:400;letter-spacing:-1.2px}
+.app-shell{position:relative;isolation:isolate;width:100%;max-width:430px;min-height:100dvh;margin:auto;overflow:hidden;background:var(--brand-100)}
+.app-shell:after{position:absolute;z-index:40;inset:0;background:var(--paper);content:"";opacity:0;pointer-events:none}
+.app-shell.is-screen-dissolving:after{animation:screen-dissolve .32s ease-out both}
+@keyframes screen-dissolve{0%{opacity:0}28%{opacity:.22}100%{opacity:0}}
+.bg-blobs{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}.blob{position:absolute;border-radius:50%;opacity:.7}.b1{width:899px;height:899px;left:-570px;top:-445px;background:var(--brand-100);filter:blur(46px)}.b2{width:592px;height:592px;left:-330px;top:-242px;background:var(--brand-200);filter:blur(100px)}.b3{width:972px;height:972px;right:-650px;bottom:-570px;background:var(--brand-100);filter:blur(41px)}.b4{width:640px;height:640px;right:-410px;bottom:-400px;background:var(--brand-200);filter:blur(100px)}
+.screen{position:relative;z-index:1;display:none;min-height:100dvh;flex-direction:column}.screen.is-active{display:flex;animation:screen-in .35s ease both}@keyframes screen-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* Main: screen-patterns exact rhythm */
+.topbar{height:64px;display:flex;align-items:center;justify-content:space-between;padding:20px 20px 12px}.brand-wordmark{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted)}.brand-wordmark .dot{width:8px;height:8px;border-radius:var(--full);background:var(--brand);box-shadow:0 2px 12px #0000000c}.content-badge{padding:4px 6px;border:1px solid var(--brand-300);border-radius:6px;background:var(--gray-00);font-size:12px;font-weight:500;color:var(--brand-contrast)}
+.main-body{display:flex;flex:1;flex-direction:column;padding-top:8px}.section-x{padding-inline:20px}.title-block{margin-top:8px;padding-left:55px;padding-right:55px}.genre-chip,.chance-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:var(--full);font-size:13px;font-weight:600}.genre-chip{background:var(--brand-100);color:var(--brand)}.title-block h1{margin:12px 0 0;font-size:36px;line-height:1.12;color:var(--brand);background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}.subtitle{margin-top:20px}.subtitle p{margin:2px 0 0;font-size:15px;line-height:1.4;color:var(--muted)}
+.hero{display:flex;justify-content:center;margin-top:38px}.cup-stage{position:relative;width:220px;height:219px}.cup-stage svg{position:relative;width:100%;height:100%;filter:drop-shadow(0 18px 22px #0000004d)}.cup-glow{position:absolute;inset:14px;border-radius:50%;background:var(--brand-200);filter:blur(20px);opacity:.9}.steam{animation:steam 2.8s ease-in-out infinite;transform-origin:center}.s2{animation-delay:.5s}.s3{animation-delay:1s}@keyframes steam{50%{transform:translateY(-5px);opacity:.45}}
+.btn-link{height:41px;padding:0 8px;background:none;color:var(--muted);font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:3px}.button-set{display:flex;flex-direction:column;gap:8px;margin-top:36px;padding:20px 16px 32px}.button-set .chance-chip,.result-bottom .chance-chip{align-self:center}.chance-chip{border:1px solid var(--brand-300);background:#ff7c111f;color:var(--brand-contrast)}.chance-chip b{color:var(--brand);font-weight:800}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:46px;padding:12px 16px;border-radius:var(--r12);font-size:16px;font-weight:700;transition:transform .12s,background .12s}.btn:active{transform:translateY(1px)}.btn-brand-solid{color:var(--gray-00);background:var(--brand);box-shadow:inset 0 0 12px #ffd0b359}.btn-brand-solid:active{background:var(--brand-700)}.btn-brand-weak{color:var(--brand);background:var(--brand-100)}.btn-brand-weak:active{background:var(--brand-200)}.btn-neutral-weak{color:var(--text);background:var(--gray-200)}.btn-neutral-weak:active{background:var(--gray-300)}.btn:disabled,.btn.is-disabled{pointer-events:none;color:var(--gray-500);background:var(--gray-200);box-shadow:var(--shadow)}
+.footer{padding:20px 20px 40px}.foot-head{display:flex;align-items:center;justify-content:space-between;padding-top:32px}.foot-head h3{margin:0;font-size:14px;color:var(--muted)}.all-view{color:var(--subtle);font-size:12px;font-weight:600;text-decoration:underline}.footer ul{margin:12px 0 0;padding:0;list-style:none}.footer li{position:relative;margin-top:6px;padding-left:10px;color:var(--subtle);font-size:12px;line-height:1.5}.footer li:before{content:'·';position:absolute;left:0}
+/* Play: same background and system progress bar */
+.play-wrap{display:flex;flex:1;flex-direction:column;padding:24px 16px 28px}.play-head{margin-top:8px;text-align:center}.step,.r-step{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--brand-contrast)}.play-head h2{margin:6px 0 0;font-size:20px;line-height:1.45;color:var(--text)}.accent{color:var(--brand)}.pour-stage{display:flex;flex:1;align-items:center;justify-content:center}.pour-inner{position:relative;width:280px;height:340px}.gauge{position:absolute;top:24px;right:2px;bottom:24px;width:14px;overflow:hidden;border-radius:var(--full);background:var(--gray-200);box-shadow:inset 0 2px 12px #0000000c}.gauge-fill{position:absolute;right:0;bottom:0;left:0;height:0;border-radius:var(--full);background:var(--brand-grad)}.layer-chip{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);white-space:nowrap}.cup-play{position:absolute;top:24px;right:26px;bottom:24px;left:8px;display:flex;align-items:center;justify-content:center}.cup-play svg{filter:drop-shadow(0 18px 22px #0000004d)}.milk-stream{position:absolute;top:-6px;left:50%;width:6px;height:0;transform:translateX(-50%);border-radius:var(--full);background:var(--gray-00);opacity:0}.is-pouring .milk-stream{height:120px;opacity:.95;animation:stream .5s ease-in-out infinite}@keyframes stream{50%{transform:translateX(calc(-50% + 1px)) scaleX(1.15)}}.hold-hint{position:absolute;right:0;bottom:-4px;left:0;color:var(--muted);font-size:13px;font-weight:600;text-align:center}.pour-btn{display:flex;align-items:center;justify-content:center;width:100%;height:46px;margin-top:20px;border-radius:var(--r12);background:var(--brand);box-shadow:inset 0 0 12px #ffd0b359;color:var(--gray-00);font-size:16px;font-weight:700;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}.pour-btn.is-pressed,.pour-btn:active{background:var(--brand-700);transform:translateY(1px)}
+.intro-overlay{position:absolute;z-index:5;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;background:#000000b3;text-align:center}.intro-line{opacity:0;transform:translateY(14px)}.show-line .intro-line{animation:fade-up .6s ease forwards}.intro-line h2{margin:10px 0 0;color:var(--gray-00);font-size:22px;line-height:1.45}.intro-line p{margin:12px 0 0;color:var(--gray-200);font-size:14px;line-height:1.45}.go{margin-top:20px;color:var(--brand-400);font-size:44px;opacity:0}.show-go .go{animation:go-pop .7s cubic-bezier(.2,.8,.3,1) forwards}@keyframes fade-up{to{opacity:1;transform:none}}@keyframes go-pop{50%{opacity:1;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}.art-layer{--art-scale:1;--art-rotation:0deg;opacity:0;transform:scale(.6);transform-origin:center}.art-layer.bloom{animation:bloom .9s cubic-bezier(.2,.8,.3,1) forwards}@keyframes bloom{55%{opacity:1}to{opacity:1;transform:scale(var(--art-scale)) rotate(var(--art-rotation))}}
+/* Result: Alert dialog over Dim, then standard button set */
+.dim{position:absolute;z-index:2;inset:0;background:#000000b3}.result-scroll{position:relative;z-index:3;display:flex;flex:1;flex-direction:column;justify-content:center;padding:20px 16px;overflow:auto}.result-card{padding:20px;border-radius:var(--r16);background:var(--gray-00);box-shadow:0 2px 12px #0000000c;animation:card-in .4s cubic-bezier(.2,.8,.3,1) both}@keyframes card-in{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}.r-step{text-align:center}.r-art{display:block;width:136px;height:136px;margin:12px auto 0;filter:drop-shadow(0 12px 12px #0000004d)}.r-headline{margin:12px 0 0;color:var(--brand);font-size:24px;text-align:center}.r-score{margin:4px 0 0;color:var(--muted);font-size:14px;text-align:center}.r-score b{color:var(--brand-contrast);font-weight:700}.r-divider{height:1px;margin:16px 0;background:var(--gray-300)}.r-fortune-label{color:var(--brand-contrast);font-size:12px;font-weight:700;letter-spacing:.16em;text-align:center}.r-fortune{margin:6px 0 0;color:var(--text);font-size:15px;font-weight:500;line-height:1.4;text-align:center}.coupon{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px;border:1px dashed var(--brand-300);border-radius:var(--r12);background:var(--brand-100)}.c-ic{flex:none;width:40px;height:40px}.c-t{color:var(--brand-contrast);font-size:12px;font-weight:600}.c-b{margin-top:2px;color:var(--text);font-size:14px;font-weight:800}.c-b em{color:var(--brand);font-style:normal}.card-cta,.result-bottom{display:flex;flex-direction:column;gap:8px}.card-cta{margin-top:20px}.point-ad-btn{gap:8px}.point-bullet{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:var(--full);background:#67ecae;color:#0a4529;font-size:12px;font-weight:800}.point-ad-btn:disabled .point-bullet{background:var(--gray-500);color:var(--gray-700)}.brag-link{margin-top:8px;text-align:center}.brag-link button{color:var(--muted);font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:3px}.result-bottom{margin-top:20px}.result-bottom .btn-link{color:var(--gray-00)}
+/* Toast */
+.toast{position:fixed;z-index:100;bottom:24px;left:50%;max-width:300px;padding:12px 16px;border-radius:var(--r12);background:var(--gray-1000);color:var(--gray-00);font-size:14px;opacity:0;pointer-events:none;transform:translate(-50%,8px);transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-height:760px){.hero{margin-top:24px}.cup-stage{width:184px;height:184px}.button-set{margin-top:20px;padding-bottom:20px}.footer{padding-bottom:24px}.result-scroll{justify-content:flex-start;padding-top:16px}.r-art{width:112px;height:112px}.coupon{margin-top:12px}.card-cta{margin-top:12px}.result-bottom{margin-top:12px}}
+
+/* Real-latte image treatment: photo texture replaces the schematic SVG cup. */
+.brand-serif{font-family:Pretendard,sans-serif;font-weight:800;letter-spacing:-1.4px}.latte-photo{display:block;object-fit:cover}.hero-latte-photo{position:relative;width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 18px 22px #0000004d)}.play-latte-photo{width:190px;height:190px;border-radius:50%;box-shadow:0 18px 22px #0000004d;transition:transform .5s cubic-bezier(.22,1,.36,1),filter .3s ease}.is-pouring .play-latte-photo{filter:brightness(1.06) saturate(1.04);transform:scale(1.025)}.result-latte-photo{width:132px;height:132px;margin:12px auto 4px;border-radius:50%;box-shadow:0 12px 20px #00000033}.art-state-source{position:absolute;width:0;height:0;overflow:hidden;opacity:0;pointer-events:none}@media(max-height:760px){.result-latte-photo{width:112px;height:112px}}
+
+/* OCB component correction: title, chips and play overlay use their documented roles. */
+.genre-chip,.chance-chip,.layer-chip{min-height:28px;border:1px solid var(--brand-300);background:#ff7c111f;color:var(--brand-contrast);line-height:1}.title-block h1{line-height:1.2;letter-spacing:-.5px}.title-block .en{margin-top:4px;font-size:12px;letter-spacing:.12em;color:var(--brand-contrast);-webkit-text-fill-color:var(--brand-contrast)}.subtitle p{margin:0;color:var(--muted);font-size:15px;font-weight:500;line-height:1.4}.hero-latte-photo,.play-latte-photo,.result-latte-photo{object-fit:contain;background:transparent}.hero-latte-photo{filter:drop-shadow(0 18px 22px #00000033)}.play-latte-photo{width:208px;height:208px;border-radius:0;box-shadow:none}.result-latte-photo{width:136px;height:136px;border-radius:0;box-shadow:none}.milk-stream{display:none}.cup-play{top:116px;right:26px;bottom:14px;left:8px;z-index:2}.pitcher-photo{position:absolute;z-index:3;top:-12px;left:50%;width:138px;height:292px;object-fit:contain;pointer-events:none;transform:translateX(-50%);clip-path:inset(0 0 52% 0);transition:clip-path .35s ease,transform .35s ease}.pitcher-photo.is-pouring{clip-path:inset(0 0 0 0);transform:translateX(-50%) scale(1.02);animation:pitcher-pour .9s ease-in-out infinite}@keyframes pitcher-pour{50%{transform:translateX(calc(-50% + 1px)) scale(1.025)}}.layer-chip{z-index:4;bottom:12px}.hold-hint{bottom:-14px;font-size:13px;font-weight:600}.intro-overlay{background:#000000b3}.intro-line{width:100%;max-width:280px;padding:24px 20px;border-radius:16px;background:var(--gray-00);box-shadow:0 2px 12px #0000000c}.intro-line .step{color:var(--brand-contrast);font-size:12px;letter-spacing:0}.intro-line h2{margin:12px 0 0;color:var(--brand);font-size:24px;line-height:1.45;letter-spacing:-.5px}.intro-line p{margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.45}.go{margin-top:20px;padding:12px 28px;border-radius:12px;background:var(--brand);box-shadow:inset 0 0 12px #ffd0b359;color:var(--gray-00);font-family:Jua,Pretendard,sans-serif;font-size:24px;line-height:1}.result-card .r-art{display:none}.r-headline{font-size:24px;letter-spacing:-.5px}.r-step{letter-spacing:0}.result-latte-photo{margin:12px auto 4px}@media(max-height:760px){.play-latte-photo{width:184px;height:184px}.pitcher-photo{width:124px;height:262px;top:0}.cup-play{top:108px}.layer-chip{bottom:8px}.hold-hint{bottom:-12px}.result-latte-photo{width:112px;height:112px}}
+.go{font-family:Pretendard,sans-serif;font-size:16px;font-weight:700}
+
+/* Angelinus BI mapping: white field / deep ink / symbol brown. */
+:root{--angel-white:#ffffff;--angel-ink:#1a1c20;--angel-symbol:#482f21;--text:var(--angel-ink);--muted:var(--gray-800);--subtle:var(--gray-700);--brand:var(--angel-symbol);--brand-contrast:var(--angel-symbol);--brand-grad:linear-gradient(135deg,var(--angel-symbol),var(--angel-symbol))}html,body,.app-shell{background:var(--angel-white)}.b1,.b3{background:var(--gray-100);opacity:.55}.b2,.b4{background:var(--gray-200);opacity:.42}.brand-wordmark{gap:0}.brand-wordmark img{display:block;width:142px;height:auto}.brand-wordmark .dot{display:none}.content-badge{border-color:#482f2133;background:var(--angel-white);color:var(--angel-symbol)}.title-block{text-align:center}.title-block h1{background:none;color:var(--angel-symbol);font-family:Pretendard,sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.2px;-webkit-text-fill-color:var(--angel-symbol)}.title-block .en{color:var(--angel-symbol);font-weight:700;letter-spacing:.1em;-webkit-text-fill-color:var(--angel-symbol)}.subtitle p{color:var(--gray-800);text-align:center}.genre-chip,.chance-chip,.layer-chip{border-color:#482f2133;background:#482f211f;color:var(--angel-symbol)}.genre-chip{background:#482f211f;color:var(--angel-symbol)}.hero{margin-top:38px}.cup-stage{width:248px;height:248px}.cup-glow{background:var(--gray-200);opacity:.8}.button-set{margin-top:36px}.btn-brand-solid,.pour-btn{background:var(--angel-symbol);box-shadow:inset 0 0 12px #ffffff33}.btn-brand-solid:active,.pour-btn.is-pressed,.pour-btn:active{background:var(--angel-ink)}.btn-brand-weak{background:#482f211f;color:var(--angel-symbol)}.chance-chip b,.layer-chip b,.accent,.r-headline{color:var(--angel-symbol)}.step,.r-step,.r-fortune-label{color:var(--angel-symbol)}.gauge-fill{background:var(--angel-symbol)}.intro-line h2{font-family:Pretendard,sans-serif;font-weight:800;color:var(--angel-symbol);letter-spacing:-1px}.intro-line .step{color:var(--angel-symbol)}.go{background:var(--angel-symbol);box-shadow:inset 0 0 12px #ffffff33}.coupon{border-color:#482f2133;background:#482f211f}.point-bullet{background:#482f211f;color:var(--angel-symbol)}
+@media(max-height:760px){.cup-stage{width:220px;height:220px}}
+
+/* Play: top progress bar + 320px cup composition. */
+.play-wrap{padding:16px 16px 28px}.play-progress{padding:8px 4px 20px}.progress-track{width:100%;height:6px;overflow:hidden;border-radius:9999px;background:var(--gray-200);box-shadow:inset 0 2px 12px #0000000c}.progress-fill{width:100%;height:100%;border-radius:9999px;background:var(--angel-symbol);transition:width .08s linear}.play-head{margin-top:0}.pour-inner{width:328px;height:440px}.gauge{display:none}.cup-play{top:112px;right:auto;bottom:auto;left:4px;width:320px;height:320px;z-index:2}.play-latte-photo{width:320px;height:320px}.latte-art-overlay{position:absolute;inset:0;width:320px;height:320px;margin:auto;object-fit:contain;clip-path:circle(30% at 50% 50%);opacity:0;pointer-events:none;transition:opacity .08s linear}.pitcher-photo{z-index:3;top:-6px;left:50%;width:128px;height:270px;transform:translateX(-50%) rotate(-14deg);transform-origin:50% 22%;clip-path:inset(0 0 52% 0);transition:clip-path .2s ease,transform .25s ease}.pitcher-photo.is-pouring{transform:translateX(-50%) rotate(0);clip-path:inset(0 0 0 0);animation:pitcher-pour .9s ease-in-out infinite}.layer-chip{bottom:0}.hold-hint{bottom:-24px}.countdown-overlay{z-index:8;background:var(--angel-white)}.countdown-number{color:var(--angel-symbol);font-size:44px;line-height:1;letter-spacing:-.5px}.countdown-number.pop{animation:count-pop .45s cubic-bezier(.2,.8,.3,1) both}@keyframes count-pop{from{opacity:0;transform:scale(.65)}60%{opacity:1;transform:scale(1.1)}to{opacity:1;transform:scale(1)}}
+
+/* Result: same open white composition as the intro, not an alert card. */
+.screen[data-screen="result"]{background:var(--angel-white)}.screen[data-screen="result"] .dim{display:none}.result-scroll{z-index:1;justify-content:center;padding:32px 20px 28px}.result-content{width:100%;text-align:center}.result-content .r-step{margin-bottom:8px}.result-content .result-latte-photo{width:216px;height:216px;margin:0 auto 12px}.result-content .r-headline{margin:0;font-size:24px}.result-content .r-score{margin-top:6px}.result-content .r-divider{margin:20px 0 16px;background:var(--gray-300)}.result-content .r-fortune{max-width:290px;margin:8px auto 0}.result-content .coupon{margin-top:20px;text-align:left}.result-content .card-cta{margin-top:20px}.result-bottom{margin-top:24px}.result-bottom .btn-link{color:var(--angel-symbol)}
+@media(max-height:760px){.play-progress{padding-bottom:12px}.pour-inner{height:404px}.cup-play{top:96px;width:320px;height:320px}.play-latte-photo,.latte-art-overlay{width:320px;height:320px}.pitcher-photo{top:-4px;width:118px;height:249px}.hold-hint{bottom:-18px}.result-scroll{padding-top:24px}.result-content .result-latte-photo{width:184px;height:184px}}
+
+/* 5-second play guidance and 30° latte composition. */
+.countdown-number{font-size:88px}.countdown-guide{margin:20px 0 0;color:var(--gray-800);font-size:14px;font-weight:600;line-height:1.45;text-align:center}.latte-art-overlay{clip-path:ellipse(32% 18% at 50% 38%)}.result-latte-stage{position:relative;width:216px;height:216px;margin:0 auto 12px}.result-content .result-latte-stage .result-latte-photo{width:216px;height:216px;margin:0}.result-art-overlay{position:absolute;inset:0;width:216px;height:216px;object-fit:contain;clip-path:ellipse(32% 18% at 50% 38%);opacity:0;pointer-events:none;transition:opacity .15s ease}.hold-hint{color:var(--gray-800)}
+@media(max-height:760px){.result-latte-stage{width:184px;height:184px}.result-content .result-latte-stage .result-latte-photo,.result-art-overlay{width:184px;height:184px}.countdown-guide{margin-top:16px}}
+
+/* Intro simplification: single white field, no category/chance chips. */
+html,body,#app,.app-shell{min-width:100%;min-height:100%;background:var(--angel-white)}.bg-blobs{display:none}.brand-wordmark img{width:114px}.title-block{padding-left:20px;padding-right:20px}.hero{overflow:visible}.cup-stage{width:min(372px,100vw);height:min(372px,100vw)}.button-set{margin-top:28px;padding-top:0}.button-set .chance-chip{display:none}@media(max-height:760px){.cup-stage{width:min(360px,100vw);height:min(360px,100vw)}}
+
+/* Content Badge: static event metadata, not an interactive Chip. */
+.content-badge,.intro-event-chip{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:4px 12px;border:0;border-radius:9999px;background:#482f211f;color:var(--angel-symbol);font-size:13px;font-weight:600;line-height:1}
+
+/* Hero art stays inside 80% of the crema: the cup itself keeps its full scale. */
+.hero-latte-stage{isolation:isolate;width:min(340px,calc(100vw - 40px));height:auto;aspect-ratio:1054/810}.hero-latte-base{position:absolute;z-index:1;top:0;left:17.2%;width:78.7%;height:auto;border-radius:0;transform:none;transition:none}.title-block .subtitle{margin-top:12px}.hero{margin-top:12px}.hero-latte-stage .cup-glow{z-index:0}.hero-caption{margin-top:12px;color:var(--gray-800);font-size:13px;font-weight:500;line-height:1.45;text-align:center}.intro-event-chip{margin-bottom:0}.button-set .chance-chip,.result-bottom .chance-chip{display:inline-flex;align-self:center;border:0}
+
+/* Pour choreography: upright pitcher → short vertical stream → fixed coffee surface. */
+.play-wrap{padding-bottom:20px}.pour-stage{flex:none;height:260px;align-items:flex-start;padding-top:0;background:#f3f1ef;border-radius:16px}.pour-inner{width:360px;height:260px}.cup-play{top:0;left:-40px;width:440px;height:440px}.play-latte-photo{width:440px;height:440px;clip-path:ellipse(46% 24% at 50% 32%);filter:drop-shadow(0 12px 14px #482f2126)}.latte-art-overlay{width:440px;height:440px;clip-path:ellipse(46% 24% at 50% 32%);transform-origin:50% 32%;transition:opacity .08s linear,transform .12s ease}.pitcher-photo{z-index:6;top:2px;left:50%;width:132px;height:230px;clip-path:inset(0 0 0 0);transform:translateX(-50%) rotate(0);transform-origin:72% 16%;transition:transform .28s cubic-bezier(.2,.8,.3,1);filter:drop-shadow(0 8px 8px #482f2133)}.pitcher-photo.is-pouring{transform:translateX(-50%) rotate(28deg);animation:none}.milk-stream{z-index:5;display:block;top:76px;left:50%;width:8px;height:0;border-radius:9999px;background:#fffef9;box-shadow:0 1px 3px #482f2199;opacity:0;transform:translateX(-50%);transition:height .12s ease,opacity .12s ease}.is-pouring .milk-stream{height:106px;opacity:1;animation:none}.layer-chip{z-index:7;bottom:28px}.hold-hint{z-index:7;bottom:10px}.pour-btn{position:relative;z-index:2;margin-top:12px}.play-time{margin-bottom:8px}.play-progress{padding-bottom:8px}@media(max-height:760px){.pour-stage{height:240px}.pour-inner{height:240px}.cup-play{top:-8px}.pitcher-photo{width:120px;height:210px}.milk-stream{top:70px}.is-pouring .milk-stream{height:94px}.pour-btn{height:56px}}
+.play-time{height:44px;margin:0;text-align:center}.play-time span{font-family:Jua,sans-serif;font-size:44px;line-height:1;color:var(--angel-symbol)}.play-time small{font-size:13px;font-weight:700}.play-core{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:0}.pour-stage{height:260px;background:transparent;border-radius:0}.pour-btn{margin:0}.fortune-card{position:relative;overflow:hidden;background:var(--angel-symbol);box-shadow:0 16px 32px #482f2140}.fortune-card:before{content:"ANGELINUS\A TODAY'S LATTE FORTUNE";position:absolute;top:16px;left:20px;white-space:pre;opacity:.62;color:#fff;font-size:10px;font-weight:700;letter-spacing:.12em;line-height:1.4;text-align:left}.fortune-card:after{content:"✦";position:absolute;right:20px;top:16px;color:#fff;font-size:20px}.result-card-title{position:relative;margin-top:24px;color:#fff}.fortune-card .result-latte-stage,.fortune-card .result-latte-photo,.fortune-card .result-art-overlay{position:relative;width:150px;height:150px}.fortune-copy{position:relative;color:#ffffffd9}.fortune-copy strong{color:#fff}.fortune-copy span{color:#ffffffd9}@media(max-height:760px){.play-core{gap:12px}.pour-stage{height:240px}}
+.play-core{gap:24px}.pitcher-photo{width:178px;height:176px;top:0;object-fit:contain}.pitcher-photo.is-pouring{transform:translateX(-50%) rotate(24deg)}.milk-stream{top:138px}.is-pouring .milk-stream{height:78px}.pour-btn,.pour-btn:not(.is-pressed):not(.is-disabled){box-shadow:inset 0 0 12px #ffffff33;animation:none}.latte-art-overlay{filter:brightness(1.13) contrast(1.08)}@media(max-height:760px){.play-core{gap:20px}.pitcher-photo{width:154px;height:152px}.milk-stream{top:122px}.is-pouring .milk-stream{height:76px}}
+
+/* Result: scrollable benefit stack, with the fortune card as the focal point. */
+.result-scroll{justify-content:flex-start;padding:24px 20px 40px;gap:24px}.fortune-card{box-sizing:border-box;width:320px;max-width:100%;height:320px;margin:0 auto;padding:20px;border-radius:16px;background:#482f211f;box-shadow:0 12px 28px #482f2114;text-align:center}.result-card-title{margin:0;color:var(--angel-symbol);font-size:18px;font-weight:800;letter-spacing:-.5px}.fortune-card .result-latte-stage{width:174px;height:174px;margin:4px auto 0}.fortune-card .result-latte-photo,.fortune-card .result-art-overlay{width:174px;height:174px}.fortune-copy{display:flex;flex-direction:column;gap:4px;margin-top:-4px;color:var(--gray-800);font-size:11px;line-height:1.35}.fortune-copy strong{color:var(--angel-ink);font-size:14px;font-weight:800}.fortune-copy span{display:block}.benefit-section{margin-top:28px;text-align:left}.benefit-section h3{margin:0 0 12px;color:var(--angel-ink);font-size:16px;font-weight:800}.coupon-card{display:flex;align-items:center;gap:12px;min-height:88px;margin-top:8px;padding:12px;border-radius:12px;background:var(--gray-100);cursor:pointer}.coupon-image{display:flex;align-items:center;justify-content:center;flex:none;width:48px;height:64px;border-radius:8px;color:#fff;font-size:26px;font-weight:800}.coupon-image-basic{background:var(--angel-symbol)}.coupon-image-special{background:var(--angel-ink)}.coupon-info{display:flex;min-width:0;flex:1;flex-direction:column;gap:4px}.coupon-info span{color:var(--gray-700);font-size:11px;font-weight:600}.coupon-info b{color:var(--angel-ink);font-size:14px}.coupon-claim{flex:none;width:auto;height:34px;padding:8px 10px;border-radius:8px;background:var(--angel-symbol);color:#fff;font-size:12px;font-weight:700}.coupon-share{max-width:92px;line-height:1.1}.point-banner{display:flex;gap:12px;align-items:flex-start;margin-top:20px;padding:16px;border-radius:12px;background:#482f211f;text-align:left}.point-banner .point-bullet{flex:none}.point-banner div{display:flex;flex-direction:column;gap:3px}.point-banner b{color:var(--angel-symbol);font-size:12px}.point-banner strong{color:var(--angel-ink);font-size:16px}.point-banner small{color:var(--gray-700);font-size:11px}.result-bottom{width:100%;margin-top:0}.result-bottom .btn-link{align-self:center;color:var(--gray-700)}@media(max-width:360px){.fortune-card{height:300px;padding:16px}.fortune-card .result-latte-stage,.fortune-card .result-latte-photo,.fortune-card .result-art-overlay{width:156px;height:156px}.fortune-copy{font-size:10px}.coupon-card{gap:8px;padding:10px}.coupon-image{width:42px;height:58px}.coupon-claim{padding:7px 8px;font-size:11px}}
+
+/* Refined interaction and result emphasis. */
+.button-set{gap:12px}.button-set .chance-chip,.result-bottom .chance-chip{margin-bottom:4px;background:var(--angel-symbol);color:#fff}.button-set .chance-chip b,.result-bottom .chance-chip b{color:#fff}.countdown-guide{font-size:17px;line-height:1.5}.play-wrap{padding-top:16px}.play-time{display:flex;align-items:baseline;justify-content:center;gap:4px;height:28px;color:var(--angel-symbol);font-weight:800}.play-time span{font-size:28px;line-height:1}.play-time small{font-size:13px}.pour-stage{align-items:flex-start;padding-top:8px}.pour-btn{align-self:center;width:min(300px,100%);height:60px;margin:0;border-radius:16px;font-size:18px;box-shadow:0 0 0 8px #482f2114,0 10px 22px #482f2133}.pour-btn:not(.is-pressed):not(.is-disabled){animation:pour-call 1.6s ease-in-out infinite}.pour-btn.is-pressed{box-shadow:none;animation:none}.pitcher-photo{top:-2px;transform:translateX(-50%) rotate(-30deg) translateY(-8px);transform-origin:72% 16%;transition:clip-path .2s ease,transform .32s cubic-bezier(.2,.8,.3,1)}.pitcher-photo.is-pouring{transform:translateX(-50%) rotate(18deg) translateY(4px);clip-path:inset(0 0 0 0);animation:none}@keyframes pour-call{50%{box-shadow:0 0 0 13px #482f210d,0 10px 22px #482f2133}}.fortune-card{width:100%;height:auto;min-height:320px;aspect-ratio:1/1;padding:20px}.fortune-card .result-latte-stage{width:184px;height:184px;margin:0 auto}.fortune-card .result-latte-photo,.fortune-card .result-art-overlay{width:184px;height:184px}.fortune-copy{gap:6px;margin-top:-2px;font-size:13px;line-height:1.45}.fortune-copy strong{font-size:18px}.coupon-image{width:64px;height:64px;object-fit:cover;border-radius:8px}.coupon-claim{width:96px;height:40px;padding:8px 6px}.coupon-share{max-width:none}.result-content{width:100%}.benefit-section{margin-top:28px}
+
+/* Final play composition: unclipped original assets on one shared coordinate system. */
+.play-time{height:44px;margin:0}.play-time span{font-family:Jua,sans-serif;font-size:44px;line-height:1}.play-time small{display:none}
+.play-core{gap:14px;justify-content:center}
+.pour-stage{width:100%;height:540px;padding:0;overflow:visible}
+.pour-inner{width:min(422px,calc(100vw - 8px));height:540px;overflow:visible}
+.cup-play{top:138px;left:0;width:min(422px,calc(100vw - 8px));height:min(422px,calc(100vw - 8px));overflow:visible}
+.play-latte-photo,.latte-art-overlay{width:min(422px,calc(100vw - 8px));height:min(422px,calc(100vw - 8px));clip-path:none;border-radius:0;object-fit:contain;transform:none;filter:none}
+.play-latte-photo{position:absolute;inset:0;width:100%;height:100%;margin:0;filter:drop-shadow(0 12px 14px #482f2126)}
+.latte-art-overlay{position:absolute;inset:0;width:100%;height:100%;margin:0;clip-path:none;object-fit:contain;transform:none!important;filter:none;transition:opacity .08s linear}
+.is-pouring .play-latte-photo{transform:none;filter:drop-shadow(0 12px 14px #482f2126)}
+.pitcher-photo{z-index:6;top:0;left:50%;width:128px;height:auto;object-fit:contain;clip-path:none;transform:translateX(-50%) rotate(48deg);transform-origin:50% 91%;transition:transform .26s cubic-bezier(.2,.8,.3,1);filter:drop-shadow(0 8px 8px #482f2133)}
+.pitcher-photo.is-pouring{clip-path:none;transform:translateX(-50%) rotate(0);animation:none}
+.milk-stream{z-index:5;display:block;top:160px;left:calc(50% - 21px);width:4px;height:0;clip-path:none;border-radius:9999px;background:#fffef9;box-shadow:0 1px 2px #482f2173;opacity:0;transform:translateX(-50%);transition:height .12s ease,opacity .12s ease}
+.pour-inner.is-pouring .milk-stream{height:85px;opacity:.98;animation:none}
+.layer-chip{display:none}
+.pour-btn,.pour-btn:not(.is-pressed):not(.is-disabled),.pour-btn.is-pressed{width:min(300px,100%);height:60px;margin:0;border-radius:16px;box-shadow:none;animation:none}
+.hold-hint{position:static;min-height:20px;margin:0;color:var(--gray-800);font-size:13px;font-weight:600;line-height:20px;text-align:center;transition:opacity .12s ease}
+@media(max-height:760px){.play-core{gap:12px}.pour-stage,.pour-inner{height:500px}.cup-play{top:125px}.pitcher-photo{width:120px}.milk-stream{top:151px;left:calc(50% - 20px)}.pour-inner.is-pouring .milk-stream{height:83px}}
+
+/* Share card: brand, result name, fortune, then one aligned cropped latte image. */
+.fortune-card{position:relative;display:block;box-sizing:border-box;width:100%;height:auto;min-height:320px;aspect-ratio:1/1;margin:0 auto;padding:20px;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,#fffdf7e8 0%,#fffdf7b8 43%,#fffdf70d 68%),url('./images/share-card-angelinus-tone-v1.jpg') center/cover;box-shadow:0 12px 28px #482f211f;text-align:left}
+.fortune-card:before,.fortune-card:after{display:none}
+.fortune-card-logo{position:absolute;z-index:1;top:20px;left:20px;display:block;width:94px;height:auto;max-height:11px;object-fit:contain}
+.result-card-title{position:absolute;z-index:1;top:54px;left:20px;right:20px;margin:0;color:var(--angel-symbol);font-size:19px;font-weight:800;letter-spacing:-.6px;line-height:1.35;text-align:left}
+.fortune-copy{position:absolute;z-index:1;top:100px;right:20px;left:20px;display:flex;flex-direction:column;gap:10px;margin:0;color:#1a1c20;font-size:14px;line-height:1.4;text-align:left}
+.fortune-card .fortune-copy p{display:flex;flex-direction:column;gap:2px;margin:0}
+.fortune-card .fortune-copy b{color:#1a1c20;font-size:13px;font-weight:800}
+.fortune-card .fortune-copy span{display:block;color:#1a1c20}
+.fortune-card .result-latte-stage{position:absolute;right:0;bottom:0;left:0;width:100%;height:54%;margin:0;overflow:hidden}
+.fortune-card .result-latte-stage .result-latte-photo{position:absolute;top:0;left:0;width:100%;height:auto;margin:0;clip-path:none;border-radius:0;object-fit:contain;transform:none;filter:none}
+@media(max-width:360px){.fortune-card{min-height:300px;padding:16px}.fortune-card-logo{width:84px}.result-card-title{top:48px;left:16px;right:16px;font-size:17px}.fortune-copy{top:88px;right:16px;left:16px;font-size:12px}.fortune-card .fortune-copy b{font-size:12px}}
+
+/* Result benefit 2: informational point banner, deliberately non-interactive. */
+.point-benefit{margin-top:28px}.point-benefit .point-banner{display:flex;align-items:center;gap:14px;margin:0;padding:14px 16px;border-radius:12px;background:#482f2110;text-align:left}.point-coin{display:block;flex:none;width:54px;height:54px;object-fit:contain}.point-banner-copy{display:flex;flex:1;flex-wrap:wrap;gap:4px;margin:0;color:var(--gray-700);font-size:13px;font-weight:500;line-height:1.45}.point-banner-copy strong{color:var(--angel-ink);font-size:15px;font-weight:800}.point-banner-copy span{color:var(--gray-700)}
+.coupon-card{min-height:120px;padding:12px}.coupon-image{width:96px;height:96px;border-radius:12px}.coupon-claim{width:112px;white-space:nowrap}.coupon-share{max-width:none;white-space:nowrap}.fortune-share-link{display:block;width:max-content;max-width:100%;height:32px;margin:12px auto 0;padding:0 8px;background:transparent;color:var(--gray-800);font-size:13px;font-weight:600;text-align:center;text-decoration:underline;text-underline-offset:3px}.result-summary{display:inline;color:var(--gray-800);font-size:15px;font-weight:700}.fortune-card .result-latte-stage{right:-4%;bottom:-2%;left:-4%;width:108%;height:58%}@media(max-width:360px){.coupon-card{min-height:112px}.coupon-image{width:84px;height:84px}.result-summary{font-size:13px}}
+.coupon-benefit{margin-top:28px}.coupon-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.coupon-grid .coupon-card{display:flex;min-width:0;min-height:0;padding:10px;flex-direction:column;align-items:stretch;gap:8px;background:var(--gray-100)}.coupon-image-wrap{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:10px;background:var(--gray-200)}.coupon-grid .coupon-image{display:block;width:100%;height:100%;border-radius:0;object-fit:cover}.coupon-special-badge{position:absolute;top:7px;right:7px;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:conic-gradient(var(--angel-symbol),var(--brand-700),var(--brand-400),var(--angel-symbol));box-shadow:0 4px 10px #482f2159;animation:special-badge-spin 3.6s linear infinite}.coupon-special-badge:before{position:absolute;inset:3px;border-radius:50%;background:var(--angel-symbol);content:""}.coupon-special-badge>span{position:relative;z-index:1;color:#fff;font-size:10px;font-weight:800;line-height:1.05;text-align:center;animation:special-badge-spin-reverse 3.6s linear infinite}@keyframes special-badge-spin{to{transform:rotate(360deg)}}@keyframes special-badge-spin-reverse{to{transform:rotate(-360deg)}}.coupon-grid .coupon-info{display:flex;min-height:42px;gap:3px;flex-direction:column}.coupon-grid .coupon-info b{overflow:hidden;color:var(--angel-ink);font-size:13px;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}.coupon-grid .coupon-info strong{color:var(--angel-symbol);font-size:16px;font-weight:800;line-height:1.2}.coupon-grid .coupon-claim{width:100%;height:42px;padding:6px 4px;border-radius:8px;font-size:12px;font-weight:800;line-height:1.15}.point-benefit{margin-top:16px}.point-benefit .point-banner-copy{flex-direction:column;align-items:flex-start;gap:2px}.point-benefit .point-banner-copy strong{font-size:16px}.point-benefit .point-banner-copy span{font-size:12px}@media(prefers-reduced-motion:reduce){.coupon-special-badge,.coupon-special-badge>span{animation:none}}@media(max-width:360px){.coupon-grid .coupon-card{padding:8px}.coupon-grid .coupon-info b{font-size:12px}.coupon-grid .coupon-info strong{font-size:14px}.coupon-grid .coupon-claim{font-size:11px}.coupon-special-badge{width:40px;height:40px}.coupon-special-badge>span{font-size:9px}}
+
+/* Larger touch target and copy, plus a two-sided vertical-axis flip for the special badge. */
+.cup-play{touch-action:none;-webkit-user-select:none;-webkit-touch-callout:none;user-select:none}
+.coupon-special-badge{width:58px;height:58px;background:var(--angel-symbol);animation:special-badge-flip 2.8s ease-in-out infinite;transform-style:preserve-3d}
+.coupon-special-badge:before{display:none}
+.coupon-special-badge>span,.coupon-special-badge:after{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;line-height:1;text-align:center;backface-visibility:hidden}
+.coupon-special-badge>span{z-index:1;animation:none}
+.coupon-special-badge:after{z-index:1;content:"스페셜";transform:rotateY(180deg)}
+@keyframes special-badge-flip{0%,100%{transform:perspective(260px) rotateY(0deg)}50%{transform:perspective(260px) rotateY(180deg)}}
+.coupon-grid .coupon-claim{height:44px;font-size:14px}
+@media(max-width:360px){.coupon-grid .coupon-claim{font-size:13px}.coupon-special-badge{width:48px;height:48px}.coupon-special-badge>span,.coupon-special-badge:after{font-size:10px}}
+
+/* Keep the café scene intact while cooling its warm cream cast into a soft gray. */
+.fortune-card{background:linear-gradient(180deg,#f6f6f6e8 0%,#f1f1f1bc 43%,#e8e8e80d 68%),linear-gradient(#8c8c8c18,#8c8c8c18),url('./images/share-card-angelinus-tone-v1.jpg') center/cover;background-blend-mode:normal,saturation,normal}
+
+/* The result name and its fortune summary are one title, including the longest pair. */
+.result-card-title{font-size:20px;line-height:1.3}
+.result-summary{font-size:18px;line-height:inherit}
+@media(max-width:360px){.result-card-title{font-size:18px}.result-summary{font-size:16px}}
+
+/* Main screen: keep the action and notice block visually connected. */
+.screen[data-screen="main"] .button-set{padding-bottom:16px}
+.screen[data-screen="main"] .footer{padding-top:8px}
+.screen[data-screen="main"] .foot-head{padding-top:16px}
+
+/* Make the two-sided special label easier to read during its flip motion. */
+.coupon-special-badge>span,.coupon-special-badge:after{font-size:14px}
+@media(max-width:360px){.coupon-special-badge>span,.coupon-special-badge:after{font-size:11px}}
+
+/* Emphasize the coffee discount line on the main screen. */
+.discount-emphasis{font-size:19px;font-weight:800;color:var(--angel-symbol)}
+@media(max-width:360px){.discount-emphasis{font-size:17px}}
+
+/* "친구에게 운세 공유하기" as an icon-led, bolder pill button. */
+.fortune-share-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:max-content;max-width:100%;height:44px;margin:14px auto 0;padding:0 20px;border-radius:9999px;background:#482f211f;color:var(--angel-symbol);font-size:16px;font-weight:800;text-align:center;text-decoration:none}
+.fortune-share-link:active{background:#482f2133}
+.fortune-share-link .share-icon{flex:none;width:19px;height:19px}
+
+/* 공유하고 쿠폰 받기: 카카오 공유 액션임을 알 수 있도록 별도 색상 + 아이콘으로 구분 */
+.coupon-grid .coupon-claim.coupon-share{display:flex;align-items:center;justify-content:center;gap:5px;background:#fee500;color:#391b1b;box-shadow:0 2px 8px #fee50066}
+.coupon-grid .coupon-claim.coupon-share:active{background:#f5dc00}
+.coupon-grid .coupon-claim.coupon-share .share-icon-mini{flex:none;width:14px;height:14px}
+@media(max-width:360px){.fortune-share-link{height:40px;padding:0 16px;font-size:14px}.fortune-share-link .share-icon{width:17px;height:17px}}
+
+/* 카페라떼R 쿠폰 받기: 스페셜(옐로우)과 구분되는 브랜드 오렌지 + 티켓 아이콘 */
+.coupon-grid .coupon-claim.coupon-basic-claim{display:flex;align-items:center;justify-content:center;gap:5px;background:var(--brand-600);color:#fff;box-shadow:0 2px 8px #ff7c1140}
+.coupon-grid .coupon-claim.coupon-basic-claim:active{background:var(--brand-700)}
+.coupon-grid .coupon-claim.coupon-basic-claim .ticket-icon{flex:none;width:14px;height:14px}
+
+/* 플레이 화면: 우유를 따르지 않고 시간이 다 되면 컵 위에 말풍선으로 재안내 */
+.pour-callout{display:none;padding:10px 18px;border-radius:9999px;background:var(--angel-symbol);color:#fff;font-size:14px;font-weight:800;line-height:1.3;text-align:center;white-space:nowrap;box-shadow:0 6px 16px #482f2140;position:relative}
+.pour-callout:after{position:absolute;bottom:-6px;left:50%;width:14px;height:14px;background:var(--angel-symbol);border-radius:2px;content:"";transform:translateX(-50%) rotate(45deg)}
+.pour-callout.show{display:block;animation:callout-bounce 1.3s ease-in-out infinite}
+@keyframes callout-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media(prefers-reduced-motion:reduce){.pour-callout.show{animation:none}}
+@media(max-width:360px){.pour-callout{padding:9px 14px;font-size:12px;white-space:normal;max-width:220px}}
+
+/* 시간 초과(무입력) 안내 팝업 */
+.pour-timeout-modal{position:absolute;inset:0;z-index:15;display:none;align-items:center;justify-content:center;padding:32px;background:#000000b3}
+.pour-timeout-modal.show{display:flex}
+.pour-timeout-box{width:100%;max-width:280px;padding:28px 24px;border-radius:16px;background:var(--gray-00);text-align:center;box-shadow:0 2px 12px #0000000c;animation:card-in .3s cubic-bezier(.2,.8,.3,1) both}
+.pour-timeout-message{margin:0 0 18px;color:var(--angel-ink);font-size:16px;font-weight:700;line-height:1.5}
+.pour-timeout-box .btn{width:100%}
+
+/* (엔젤리너스 로고 배지는 제거됨) */
+
+/* 할인가 표시: %할인 옆에 괄호로 정가(취소선)→최종가 표기 */
+.coupon-grid .coupon-discount-row{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}
+.coupon-grid .coupon-price{display:inline-flex;align-items:baseline;gap:3px;font-size:12px;font-weight:700;line-height:1.3}
+.coupon-grid .coupon-price s{color:var(--angel-symbol);font-weight:800;text-decoration:line-through}
+.coupon-grid .coupon-price .coupon-price-arrow{color:var(--gray-600);font-weight:600}
+.coupon-grid .coupon-price .coupon-price-final{color:var(--angel-symbol);font-weight:800}
+@media(max-width:360px){.coupon-grid .coupon-price{font-size:10px}}
+
+/* 아메리카노R 이미지 우하단에 매장 한정 안내 태그 */
+.coupon-location-tag{position:absolute;right:6px;bottom:6px;z-index:2;padding:3px 7px;border-radius:6px;background:#000000b3;color:#fff;font-size:9px;font-weight:600;line-height:1.2;white-space:nowrap}
+@media(max-width:360px){.coupon-location-tag{font-size:8px;padding:2px 6px}}
+.point-benefit .point-banner{background:linear-gradient(135deg,var(--brand-100),var(--brand-200));border:1px solid var(--brand-300);box-shadow:0 4px 14px #ff7c1126}
+.point-benefit .point-coin{width:60px;height:60px;filter:drop-shadow(0 4px 8px #ff7c1145)}
+.point-benefit .point-banner-copy strong{color:var(--brand-600);font-size:20px;font-weight:800;letter-spacing:-.3px;animation:point-pulse 1.8s ease-in-out infinite}
+@keyframes point-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@media(prefers-reduced-motion:reduce){.point-benefit .point-banner-copy strong{animation:none}}
+@media(max-width:360px){.point-benefit .point-banner-copy strong{font-size:18px}}
+
+/* -------------------------------------------------------------------------
+   Editorial latte theme — visual-only layer
+   Reference: soft ivory paper, espresso ink, muted coral, graceful serif.
+   This layer deliberately leaves markup, asset selection and game behaviour intact.
+   ------------------------------------------------------------------------- */
+:root{
+  --paper:#fbf2e4;
+  --paper-deep:#f5e6d1;
+  --paper-card:#fff9f0;
+  --espresso:#382319;
+  --cocoa:#6f4b39;
+  --latte:#a86b43;
+  --coral:#fa896d;
+  --line:#dfcfbc;
+  --text:var(--espresso);
+  --muted:#7e6556;
+  --subtle:#9a8170;
+  --brand:var(--espresso);
+  --brand-contrast:var(--cocoa);
+  --brand-grad:linear-gradient(135deg,var(--espresso),var(--cocoa));
+  --shadow:0 12px 28px rgba(78,48,29,.10);
+}
+
+html,body,#app,.app-shell,.screen[data-screen="main"],.screen[data-screen="result"]{background:var(--paper)}
+body{font-family:Pretendard,Arial,sans-serif;letter-spacing:-.025em}
+.jua{font-family:'Iowan Old Style','AppleMyungjo','Nanum Myeongjo',Georgia,serif;font-weight:400}
+.brand-serif{font-family:'Iowan Old Style','AppleMyungjo','Nanum Myeongjo',Georgia,serif;font-weight:400;letter-spacing:-.055em}
+.bg-blobs{opacity:.8}
+.b1,.b3{background:#fff9ef;filter:blur(55px)}
+.b2,.b4{background:#f1d9bd;opacity:.42;filter:blur(110px)}
+
+/* Main */
+.topbar{height:90px;padding:28px 34px 14px}
+.brand-wordmark img{width:48px;opacity:.76;filter:sepia(.4) saturate(.65) brightness(.65)}
+.content-badge{padding:0;border:0;border-radius:0;background:transparent;color:var(--cocoa);font-size:12px;font-weight:500;letter-spacing:.20em}
+.title-block{margin-top:58px;padding-right:34px;padding-left:34px;text-align:left}
+.genre-chip,.chance-chip,.layer-chip{min-height:auto;padding:0;border:0;border-radius:0;background:transparent;color:var(--coral);font-size:12px;font-weight:500;letter-spacing:.28em}
+.title-block h1{margin-top:18px;color:var(--espresso);font-family:'AppleMyungjo','Nanum Myeongjo','Iowan Old Style',Georgia,serif;font-size:48px;font-weight:400;letter-spacing:-.09em;line-height:1.12;text-align:left;-webkit-text-fill-color:var(--espresso)}
+.subtitle{margin-top:30px}
+.subtitle p{color:var(--muted);font-size:17px;font-weight:400;line-height:1.78;text-align:left}
+.discount-emphasis{color:var(--espresso);font-size:18px;font-weight:800}
+.hero{margin-top:36px}
+.hero-latte-stage{width:min(360px,calc(100vw - 48px))}
+.hero-latte-stage .cup-glow{background:#f0cda8;filter:blur(30px);opacity:.52}
+.hero-caption{margin-top:8px;color:var(--muted);font-size:13px;font-weight:400;line-height:1.65}
+.button-set{align-items:flex-start;gap:0;margin-top:32px;padding:0 34px 26px}
+.button-set .chance-chip,.result-bottom .chance-chip{display:none}
+.btn-brand-solid,.pour-btn{border-radius:999px;background:var(--espresso);box-shadow:0 8px 18px rgba(56,35,25,.16);color:#fff}
+.btn-brand-solid:active,.pour-btn.is-pressed,.pour-btn:active{background:#24150f}
+.button-set .btn{width:244px;height:58px;font-size:17px;font-weight:600}
+.btn-brand-weak{background:rgba(111,75,57,.08);color:var(--cocoa)}
+.footer{padding:14px 34px 34px}
+.foot-head{padding-top:14px;border-top:1px solid var(--line)}
+.foot-head h3{font-size:13px;font-weight:600;color:var(--cocoa)}
+.footer li{color:var(--subtle);font-size:11px;line-height:1.6}
+
+/* Play and overlays */
+.play-wrap{background:var(--paper)}
+.progress-track{height:3px;background:var(--paper-deep);box-shadow:none}
+.progress-fill{background:var(--coral)}
+.play-time,.play-time span{color:var(--espresso)}
+.play-time span{font-family:'Iowan Old Style','AppleMyungjo',Georgia,serif;font-size:40px;font-weight:400}
+.play-head h2,.hold-hint{color:var(--cocoa);font-weight:400}
+.pour-btn{font-size:17px;font-weight:600}
+.intro-overlay,.pour-timeout-modal{background:rgba(56,35,25,.28)}
+.countdown-overlay{background:var(--paper)}
+.countdown-number{color:var(--espresso);font-family:'Iowan Old Style','AppleMyungjo',Georgia,serif;font-weight:400}
+.countdown-guide{color:var(--muted);font-weight:400}
+.intro-line,.pour-timeout-box{border:1px solid var(--line);border-radius:20px;background:var(--paper-card);box-shadow:var(--shadow)}
+.intro-line h2,.intro-line .step,.pour-timeout-message{color:var(--espresso)}
+
+/* Result and benefit surfaces */
+.result-scroll{background:var(--paper)}
+.fortune-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(255,249,240,.92),rgba(251,242,228,.60)),url('./images/share-card-angelinus-tone-v1.jpg') center/cover;box-shadow:var(--shadow)}
+.fortune-card-logo{filter:sepia(.45) saturate(.65) brightness(.65)}
+.result-card-title{color:var(--espresso);font-family:'AppleMyungjo','Nanum Myeongjo','Iowan Old Style',Georgia,serif;font-weight:400}
+.result-summary,.fortune-copy,.fortune-card .fortune-copy span{color:var(--muted);font-family:Pretendard,Arial,sans-serif;font-weight:400}
+.fortune-card .fortune-copy b{color:var(--cocoa)}
+.benefit-section h3{color:var(--espresso);font-size:16px;font-weight:600}
+.coupon-grid .coupon-card{border:1px solid var(--line);border-radius:16px;background:var(--paper-card);box-shadow:none}
+.coupon-image-wrap{background:var(--paper-deep)}
+.coupon-grid .coupon-info b{color:var(--espresso);font-weight:600}
+.coupon-grid .coupon-info strong,.coupon-grid .coupon-price s,.coupon-grid .coupon-price .coupon-price-final{color:var(--latte)}
+.coupon-grid .coupon-claim.coupon-basic-claim{background:var(--espresso);box-shadow:none}
+.coupon-grid .coupon-claim.coupon-share{background:#f4d85a;box-shadow:none}
+.point-benefit .point-banner{border:1px solid var(--line);border-radius:16px;background:var(--paper-card);box-shadow:none}
+.point-benefit .point-banner-copy strong{color:var(--latte);animation:none}
+.result-bottom .btn-link{color:var(--cocoa)}
+.coupon-special-badge{background:var(--coral);box-shadow:none}
+
+@media(max-width:360px){
+  .topbar{padding-right:24px;padding-left:24px}
+  .title-block{margin-top:42px;padding-right:24px;padding-left:24px}
+  .title-block h1{font-size:42px}
+  .subtitle p{font-size:15px}
+  .button-set,.footer{padding-right:24px;padding-left:24px}
+}
+
+/* Editorial theme refinements: alignment and hierarchy. */
+.brand-wordmark img{width:76px}
+.title-block{text-align:center}
+.title-block h1,.subtitle p{text-align:center}
+.button-set{width:100%}
+.button-set .btn{width:100%}
+.foot-head{border-top:0}
+.progress-track{height:9px}
+.result-card-title,.result-summary{
+  font-family:'AppleMyungjo','Nanum Myeongjo','Iowan Old Style',Georgia,serif;
+  font-size:22px;
+  font-weight:400;
+  line-height:1.38;
+}
+@media(max-width:360px){
+  .brand-wordmark img{width:66px}
+  .result-card-title,.result-summary{font-size:19px}
+}
+
+/* Result hierarchy: fortune message first, latte-art name beneath it. */
+.result-card-title{display:flex;flex-direction:column;gap:3px}
+.result-card-title #result-summary{
+  order:-1;
+  display:block;
+  overflow:visible;
+  color:var(--cocoa);
+  font-size:28px;
+  font-weight:400;
+  line-height:1.28;
+  white-space:nowrap;
+}
+.result-card-title #result-heart-name{
+  display:none;
+  color:var(--cocoa);
+  font-size:19px;
+  font-weight:400;
+  line-height:1.35;
+}
+.fortune-copy{top:110px}
+.coupon-special-badge{background:#f4d85a}
+.coupon-special-badge>span,.coupon-special-badge:after{color:var(--espresso)}
+.coupon-grid .coupon-claim.coupon-share{background:#f4d85a;color:var(--espresso)}
+@media(max-width:360px){
+  .result-card-title #result-summary{font-size:24px}
+  .result-card-title #result-heart-name{font-size:17px}
+}
+
+/* 5초 컵 컨트롤 프로토타입: 실제 3D 모델 대신 가벼운 2.5D 합성으로 구현. */
+.play-core{gap:10px}
+.play-time{display:none!important}
+.play-progress{display:none!important}
+.play-intro-copy{display:none}
+.cup-control-stage{
+  position:relative;width:100%;height:540px;
+  overflow:visible;perspective:900px;touch-action:none;
+}
+.cup-play{
+  --cup-x:0px;--cup-y:0px;--cup-rx:0deg;--cup-ry:0deg;--cup-rz:0deg;
+  position:absolute!important;top:104px!important;left:50%!important;width:min(92vw,392px)!important;height:min(92vw,392px)!important;
+  cursor:grab;z-index:2;transform:translate3d(calc(-50% + var(--cup-x)),var(--cup-y),0) rotateX(var(--cup-rx)) rotateY(var(--cup-ry)) rotateZ(var(--cup-rz))!important;
+  transform-style:preserve-3d;transition:filter .18s ease;will-change:transform;
+}
+.cup-play.is-dragging{cursor:grabbing;filter:drop-shadow(0 18px 22px rgba(72,47,33,.24))}
+.cup-touch-surface{display:none}
+.cup-play.has-moved .cup-touch-surface{opacity:0;animation:none}
+@keyframes touch-surface-breathe{50%{opacity:.45;transform:scale(1.025)}}
+.play-latte-photo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 13px 15px rgba(72,47,33,.22))!important}
+.play-latte-photo.phase-in{animation:latte-phase-in .34s cubic-bezier(.22,1,.36,1) both}
+@keyframes latte-phase-in{from{opacity:.55;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.play-latte-photo-prev{z-index:1!important;opacity:0;pointer-events:none}
+.play-latte-photo-prev.crossfade-out{animation:latte-crossfade-out .28s ease-out both}
+.cup-play .play-latte-photo:not(.play-latte-photo-prev):not(.art-ghost){z-index:2}
+@keyframes latte-crossfade-out{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(1.012)}}
+.cup-play.has-moved .drag-label,.cup-play.has-moved .drag-finger{opacity:0;visibility:hidden}
+/* 컵과 받침은 단일 고정 레이어. 27개 결과는 아트 투명 레이어만 바뀐다. */
+.play-art-photo,.result-art-photo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;pointer-events:none;z-index:3;opacity:1}
+.play-art-photo-prev{opacity:0;z-index:2}
+.play-art-photo-prev.crossfade-out{animation:latte-crossfade-out .28s ease-out both}
+.play-art-photo.phase-in{animation:latte-phase-in .34s cubic-bezier(.22,1,.36,1) both}
+.result-art-photo{z-index:2}
+/* 컵 전면의 엔제리너스 심볼: 아트가 아닌 도자기 본체를 따라 움직인다. */
+.cup-symbol{position:absolute;z-index:4;top:60%;left:43.2%;width:10.5%;height:auto;pointer-events:none;transform:translateZ(10px)}
+/* 투명 캔버스의 손잡이 무게를 보정해, 결과 카드에서 커피 면 중심이 카드의 중심에 오도록 한다. */
+.fortune-card .result-latte-stage{right:0!important;left:0!important;width:100%!important}
+.fortune-card .result-latte-stage .result-latte-photo{left:5%!important;width:104%!important}
+/* 새 손잡이 없는 정중앙 컵은 별도 치우침 보정이 필요 없다. 결과도 플레이와 같은 베이스/아트 좌표를 쓴다. */
+.fortune-card .result-latte-stage .result-latte-photo,
+.fortune-card .result-latte-stage .result-art-photo{left:0!important;width:100%!important}
+.cup-control-stage .pitcher-photo{
+  /* 기울어진 포트의 주둥이가 화면/컵의 정중앙에 오도록 몸체를 오른쪽으로 보정한다. */
+  position:absolute!important;z-index:7;top:-72px!important;left:calc(50% + 36px)!important;width:138px!important;height:auto!important;
+  object-fit:contain;transform-origin:38% 86%!important;
+  filter:drop-shadow(0 8px 8px rgba(72,47,33,.20));opacity:0;transition:opacity .24s ease,transform .32s cubic-bezier(.22,1,.36,1);
+}
+.cup-control-stage .pitcher-ready{opacity:1;transform:translateX(-50%) rotate(0)!important}
+.cup-control-stage .pitcher-pouring{opacity:0;transform:translateX(-50%) rotate(30deg)!important}
+.cup-control-stage.is-ready .pitcher-ready,.cup-control-stage.is-settling .pitcher-ready{opacity:1}
+.cup-control-stage.is-ready .pitcher-pouring,.cup-control-stage.is-settling .pitcher-pouring{opacity:0}
+.cup-control-stage.is-settling .milk-stream{height:0!important;opacity:0!important}
+.cup-control-stage.is-pouring .pitcher-ready{opacity:0;transform:translateX(-50%) rotate(12deg)!important}
+.cup-control-stage.is-pouring .pitcher-pouring{opacity:1;transform:translateX(-50%) rotate(30deg)!important}
+.cup-control-stage .milk-stream{
+  position:absolute!important;z-index:6;display:block!important;top:67px!important;left:50%!important;width:7px!important;height:0!important;
+  border-radius:999px;background:linear-gradient(90deg,#fff7e9,#fffef9 52%,#ead7c0);box-shadow:0 1px 4px rgba(72,47,33,.42);opacity:0;
+  transform:translateX(-50%);transition:height .16s ease,opacity .16s ease;
+}
+.cup-control-stage.is-pouring .milk-stream{height:129px!important;opacity:1!important;animation:continuous-milk .72s ease-in-out infinite}
+@keyframes continuous-milk{50%{transform:translateX(calc(-50% + 1px)) scaleX(1.1)}}
+.drag-label{position:absolute;top:38%;left:50%;z-index:5;padding:7px 10px;border-radius:999px;background:#382319d9;color:#fff;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none;transform:translate(-50%,-50%) translateZ(8px);transition:opacity .2s ease;animation:drag-label-wiggle 1.6s ease-in-out infinite}
+@keyframes drag-label-wiggle{0%,100%{transform:translate(-50%,-50%) translateZ(8px) translateX(0)}50%{transform:translate(-50%,-50%) translateZ(8px) translateX(9px)}}
+@media(prefers-reduced-motion:reduce){.drag-label{animation:none}}
+
+/* 라떼 아트 중앙의 작은 손가락 표시: 터치 지점을 알려준다 */
+.drag-finger{position:absolute;top:50%;left:50%;z-index:5;font-size:24px;line-height:1;pointer-events:none;transform:translate(-50%,-50%) translateZ(8px);transition:opacity .2s ease;filter:drop-shadow(0 2px 3px rgba(56,35,25,.4));animation:drag-finger-tap 1.4s ease-in-out infinite}
+@keyframes drag-finger-tap{0%,100%{transform:translate(-50%,-50%) translateZ(8px) scale(1)}50%{transform:translate(-50%,-50%) translateZ(8px) scale(.88)}}
+@media(prefers-reduced-motion:reduce){.drag-finger{animation:none}}
+
+/* 컵을 흔드는 방향(좌/우) 쪽에만 얇은 호가 나타난다. 진행률 채움이 아니라 방향 표시다. */
+.cup-ring{position:absolute;inset:9%;z-index:1;pointer-events:none;opacity:0;transition:opacity .15s ease}
+.cup-play.is-dragging .cup-ring{opacity:1}
+.cup-control-stage.is-settling .cup-ring{opacity:0}
+.cup-ring-arc{fill:none;stroke:#482f21cc;stroke-width:2.5;stroke-linecap:round;opacity:0;transition:opacity .1s ease}
+.cup-ring-arc.active{opacity:1}
+
+/* 라떼 아트에 기울기 · 번짐을 입히는 래퍼 (기존 이미지 규칙을 건드리지 않는다) */
+.art-flair{position:absolute;inset:0;transform:rotate(var(--art-tilt,0deg));filter:blur(var(--art-blur,0px));transition:transform .4s cubic-bezier(.22,1,.36,1),filter .4s ease}
+/* 하트 겹수(레이어): 살짝 어긋난 위치에 같은 아트를 옅게 겹쳐 '겹쳐 그린' 느낌을 낸다 */
+.art-ghost{z-index:0!important;opacity:0;transition:opacity .3s ease}
+.art-ghost.show1{opacity:.42;transform:translate(8%,-7%) rotate(-13deg) scale(.87)!important}
+.art-ghost.show2{opacity:.30;transform:translate(-9%,8%) rotate(15deg) scale(.80)!important}
+.cup-play.is-dragging .drag-label,.cup-play.is-dragging .drag-finger{opacity:0}
+.stage-status{min-height:38px;margin-top:6px;color:var(--espresso);font-family:'AppleMyungjo','Nanum Myeongjo','Iowan Old Style',Georgia,serif;font-size:26px;font-weight:400;letter-spacing:-.07em;line-height:38px;text-align:center}
+.hold-hint{position:static!important;min-height:27px;margin:0!important;color:var(--cocoa)!important;font-size:14px!important;font-weight:500!important;line-height:27px!important;text-align:center}
+/* 별도 타원 클립이 이미지를 다시 자르지 않게, 아트 이미지의 투명 마스크만 사용한다. */
+.cup-control-stage .latte-art-overlay{clip-path:none!important}
+@media(max-height:760px){.cup-control-stage{height:480px}.cup-play{top:90px!important;width:min(90vw,370px)!important;height:min(90vw,370px)!important}.cup-control-stage .pitcher-photo{top:-78px!important;width:118px!important}.cup-control-stage .milk-stream{top:52px!important}.cup-control-stage.is-pouring .milk-stream{height:126px!important}}
+
+/* Result: calm tonal surfaces without card outlines. */
+.result-scroll{padding:30px 24px 52px;gap:30px}
+.fortune-card{
+  border:0!important;border-radius:20px;
+  background:#fffdf9!important;
+  box-shadow:none!important;
+}
+.coupon-benefit{margin-top:34px}
+.coupon-grid{gap:14px}
+.coupon-grid .coupon-card{
+  padding:16px!important;border:0!important;border-radius:18px;
+  background:#fffdf9!important;box-shadow:none!important;
+}
+.coupon-image-wrap{padding:0;border-radius:0;background:transparent}
+.coupon-grid .coupon-image{border-radius:0}
+.coupon-grid .coupon-info{gap:6px;margin-top:2px}
+.coupon-grid .coupon-claim{margin-top:2px}
+.point-benefit{margin-top:22px}
+.point-benefit .point-banner{
+  padding:18px!important;border:0!important;border-radius:18px;
+  background:#fffdf9!important;box-shadow:none!important;
+}
+@media(max-width:360px){
+  .result-scroll{padding-right:20px;padding-left:20px}
+  .coupon-grid{gap:10px}
+  .coupon-grid .coupon-card{padding:12px!important}
+  .coupon-image-wrap{padding:5px}
+}
+
+/* One continuous pitcher: same object rests upright, tilts to pour, then returns. */
+.cup-control-stage .pitcher-photo{
+  position:absolute!important;
+  z-index:7;
+  top:-50px!important;
+  left:calc(50% + 92px)!important;
+  width:154px!important;
+  height:auto!important;
+  opacity:1!important;
+  object-fit:contain;
+  pointer-events:none;
+  /* 원본 포트가 이미 주둥이 쪽으로 기울어진 구도이므로, 대기에서는
+     반대 방향으로 보정해 세워 둔다. */
+  transform:translateX(calc(-50% - 9px)) translateY(32px) rotate(27deg)!important;
+  transform-origin:54% 17%!important;
+  filter:drop-shadow(0 8px 8px rgba(72,47,33,.20));
+  transition:transform .56s cubic-bezier(.22,1,.36,1)!important;
+  will-change:transform;
+}
+/* 첫 조작 시 보정 회전을 풀어 주둥이가 커피 중앙으로 내려온다. */
+.cup-control-stage.is-pouring .pitcher-photo{
+  transform:translateX(-50%) rotate(0deg)!important;
+}
+.cup-control-stage.is-settling .pitcher-photo{
+  transform:translateX(calc(-50% - 9px)) translateY(32px) rotate(27deg)!important;
+}
+.cup-control-stage .milk-stream{
+  z-index:6;
+  top:99px!important;
+  left:50%!important;
+  width:6px!important;
+  height:0!important;
+  border-radius:999px;
+  background:linear-gradient(90deg,#fff7e9,#fffef9 52%,#ead7c0);
+  box-shadow:0 1px 3px rgba(72,47,33,.28);
+  opacity:0;
+  transition:height .20s ease-out,opacity .20s ease-out!important;
+}
+.cup-control-stage.is-pouring .milk-stream{
+  height:98px!important;
+  opacity:.98!important;
+  animation:continuous-milk .72s ease-in-out infinite;
+}
+/* The mark belongs on the front centre of the porcelain, not the image canvas. */
+.cup-symbol{
+  top:61.5%!important;
+  left:50%!important;
+  width:8%!important;
+  transform:translateX(-50%) translateZ(10px)!important;
+}
+@media(max-height:760px){
+  .cup-control-stage .pitcher-photo{top:-56px!important;width:138px!important;left:calc(50% + 80px)!important}
+  .cup-control-stage .milk-stream{top:83px!important}
+  .cup-control-stage.is-pouring .milk-stream{height:94px!important}
+}
+
+/* Gameplay guidance needs to remain readable over the warm background. */
+.stage-status{
+  color:var(--espresso)!important;
+  font-weight:700!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.72);
+}
+.hold-hint{
+  color:var(--cocoa)!important;
+  font-weight:700!important;
+}
+
+/* Final play order: message → pitcher → cup.
+   The source pitcher has its spout at 31% of its width.  In pouring state
+   that point is deliberately aligned with the stage centre, so the milk
+   drops vertically from the spout into the middle of the coffee. */
+.play-core{
+  gap:0!important;
+}
+.play-core .stage-status{
+  min-height:0!important;
+  margin:0 0 8px!important;
+  font-size:26px!important;
+  line-height:1.35!important;
+}
+.play-core .hold-hint{
+  min-height:0!important;
+  margin:0 0 22px!important;
+  line-height:1.4!important;
+}
+.cup-control-stage .pitcher-photo{
+  top:-22px!important;
+  left:calc(50% + 29px)!important;
+  width:154px!important;
+  --pitcher-x:0px;--pitcher-rot:0deg;
+  /* The base asset is the actual pouring angle.  Rotate it back only while
+     idle, then release it into this natural pour angle on first drag. */
+  transform:translateX(-50%) translate(22px,-11px) rotate(-27deg)!important;
+  transform-origin:54% 17%!important;
+  transition:transform .46s cubic-bezier(.22,1,.36,1)!important;
+}
+.cup-control-stage.is-pouring .pitcher-photo{
+  transform:translateX(calc(-50% + var(--pitcher-x))) rotate(var(--pitcher-rot))!important;
+  transition:transform .08s linear!important;
+}
+.cup-control-stage.is-settling .pitcher-photo{
+  transform:translateX(-50%) translate(22px,-11px) rotate(-27deg)!important;
+}
+.cup-control-stage .milk-stream{
+  top:126px!important;
+  left:50%!important;
+  width:6px!important;
+  height:0!important;
+  transform:translateX(-50%)!important;
+  opacity:0!important;
+  animation:none!important;
+  transition:height .18s ease-out, opacity .16s ease-out!important;
+}
+.cup-control-stage.is-pouring .milk-stream{
+  height:60px!important;
+  opacity:.98!important;
+  /* No lateral wobble: this must remain directly beneath the spout. */
+  animation:none!important;
+}
+/* Centre the symbol by its own bounds on the cup's porcelain front. */
+.cup-symbol{
+  top:64%!important;
+  left:50%!important;
+  width:7.2%!important;
+  transform:translate(-50%,-50%) translateZ(10px)!important;
+}
+@media(max-height:760px){
+  .cup-control-stage .pitcher-photo{
+    top:-18px!important;
+    left:calc(50% + 25px)!important;
+    width:138px!important;
+  }
+  .cup-control-stage .milk-stream{top:113px!important}
+  .cup-control-stage.is-pouring .milk-stream{height:57px!important}
+}
+
+/* Main: bring the event label closer to the brand/date line. */
+.title-block{margin-top:14px!important}
+
+/* Play: clear vertical rhythm and physically continuous pour. */
+.play-core .hold-hint{margin-bottom:22px!important}
+.cup-control-stage{margin-top:54px!important}
+.cup-control-stage .pitcher-photo{
+  /* Idle: opposite-direction 45° rotation, visibly to the left on screen. */
+  left:calc(50% + 37px)!important;
+  transform:translateX(-50%) translate(22px,-11px) rotate(45deg)!important;
+}
+.cup-control-stage.is-settling .pitcher-photo{
+  transform:translateX(-50%) translate(22px,-11px) rotate(45deg)!important;
+}
+.cup-control-stage .milk-stream{
+  z-index:6!important;
+  height:0!important;
+}
+.cup-control-stage.is-pouring .milk-stream{
+  height:80px!important;
+}
+/* The stream is exactly the visible nozzle-to-coffee gap. */
+.cup-symbol{
+  /* Cup front, not the transparent square canvas: its visual midpoint is
+     slightly above the canvas midpoint in this 30° view. */
+  top:59%!important;
+}
+@media(max-height:760px){
+  .cup-control-stage{margin-top:48px!important}
+  .cup-control-stage.is-pouring .milk-stream{height:72px!important}
+}
+
+/* The nozzle-to-coffee distance is 80px, so the milk line itself is the gap. */
+.cup-play{top:126px!important}
+
+/* Fine editorial strokes and full-bleed coupon imagery. */
+.cup-symbol{top:60.5%!important}
+.fortune-card{
+  border:1px solid rgba(111,77,53,.18)!important;
+}
+.coupon-grid .coupon-card{
+  gap:0!important;
+  padding:0!important;
+  overflow:hidden;
+  border:1px solid rgba(111,77,53,.16)!important;
+  border-radius:18px!important;
+}
+.coupon-image-wrap{
+  width:100%!important;
+  margin:0!important;
+  border-radius:17px 17px 0 0!important;
+  overflow:hidden!important;
+  background:#fff!important;
+}
+.coupon-grid .coupon-image{
+  width:100%!important;
+  height:100%!important;
+  border-radius:0!important;
+  object-fit:cover!important;
+}
+.coupon-grid .coupon-info{
+  margin:12px 0 0!important;
+  padding:0 14px!important;
+}
+.coupon-grid .coupon-claim{
+  width:auto!important;
+  margin:12px 14px 14px!important;
+}
+.coupon-location-tag{
+  right:auto!important;
+  bottom:8px!important;
+  left:8px!important;
+  padding:4px 8px!important;
+  font-size:11px!important;
+}
+.point-benefit .point-banner{
+  border:1px solid rgba(111,77,53,.16)!important;
+}
+@media(max-width:360px){
+  .coupon-grid .coupon-info{padding:0 10px!important}
+  .coupon-grid .coupon-claim{margin-right:10px!important;margin-bottom:10px!important;margin-left:10px!important}
+  .coupon-location-tag{font-size:10px!important}
+}
